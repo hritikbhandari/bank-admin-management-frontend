@@ -2,24 +2,21 @@ import React,{useEffect,useState} from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import {Link} from "react-router-dom";
-import { getAllBranch } from '../../Service';
+import { deleteBranch, getAllBranch } from '../../Service';
 import Dashboard from '../Dashboard/Dashboard';
-
-
-
 
 const BranchDetails = props => {
    
+  const[branchDetails,setBranchDetails]=useState([]);
+  const[err,setError]=useState('');
+  const [loadFlag, setLoadFlag] = useState(true);
 
-  const[branchs,setBranchs]=useState([]);
-  const[err,setError]=useState('')
 
-
-  const init=async()=>{
+  const loadData = async()=>{
     try{
-      let {data}=await getAllBranch();
-      setBranchs(data)
-
+      let {status, data} =await getAllBranch();
+      if(status == 200)
+        setBranchDetails(data);
     }
     catch(err)
     {
@@ -27,22 +24,22 @@ const BranchDetails = props => {
     }
   }
 
-  const dummyBranch=[
-    {
-    "BranchId":"b001",
-    "BranchName":"Asif Ali Road",
-    "BranchAddress":"Delhi",
-    },
-    {
-      "BranchId":"b001",
-      "BranchName":"Asif Ali Road",
-      "BranchAddress":"Delhi",
-      }
-   
-];
+  useEffect(() => {
+    if(loadFlag) {
+      loadData();
+      setLoadFlag(false);
+    }
+  }, [loadFlag]);
 
-const deleteBranch = async id => {
-
+const deleteBranchHandler = async (id) => {
+  console.log(id);
+  const {status, data} = await deleteBranch(id);
+  if(status === 200) {
+    setLoadFlag(true);
+  }
+  else {
+    alert(data);
+  }
 };
 
     
@@ -62,17 +59,17 @@ const deleteBranch = async id => {
             </tr>
           </thead>
           <tbody>
-          {dummyBranch.map((branch) => (
+          {branchDetails.map((branch) => (
               <tr>
-                <td>{branch.BranchId}</td>
-                <td>{branch.BranchName}</td>
-                <td>{branch.BranchAddress}</td>
+                <td>{branch.branchId}</td>
+                <td>{branch.branchName}</td>
+                <td>{branch.branchCity}</td>
                 
                 <td>
                  
                   <Link
                     class="btn btn-danger"
-                    onClick={() => deleteBranch()}
+                    onClick={() => deleteBranchHandler(branch.branchId)}
                   >
                     Delete
                   </Link>

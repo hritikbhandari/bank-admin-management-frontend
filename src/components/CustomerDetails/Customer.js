@@ -1,53 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
-import { getAllCustomer } from '../../Service';
+import { deleteCustomerAccount, getAllCustomerAccount } from '../../Service';
 import Dashboard from '../Dashboard/Dashboard';
 
 
 
 const Customer = props => {
 
-    const [customers, setCustomers] = useState([]);
+    const [customerAccounts, setCustomerAccounts] = useState([]);
     const [err, setError] = useState('');
-    const dummyCustomers=[
-        {
-        "AccountNo":"C001",
-        "customerNo":"1234",
-        "branchId":"b001",
-        "balance":"6000",
-        "openingDate":"2022-7-11"
-        },
-        {
-            "AccountNo":"C001",
-        "customerNo":"1234",
-        "branchId":"b001",
-        "balance":"6000",
-        "openingDate":"2022-7-11"
-        }
-    ];
+    const [loadFlag, setLoadFlag] = useState(true);
+    
 
-    const init = async () => {
-
+    const loadData = async () => {
         try {
-            let { data } = await getAllCustomer()
-           
-            setCustomers(data);
+            const {status, data} = await getAllCustomerAccount();
+            if(status === 200)
+            setCustomerAccounts(data);
         } catch (err) {
             setError(err);
         }
-
-
-       
     }
 
     useEffect(() => {
-        init();
-    }, []);
+      if(loadFlag) {
+        loadData();
+        setLoadFlag(false);
+      }
+    }, [loadFlag]);
 
-    const deleteCustomer = async id => {
+    const deleteAccountHandler = async (id) => {
+      console.log(id);
+      const {status, data} = await deleteCustomerAccount(id);
+      if(status === 200) {
+        setLoadFlag(true);
+      }
+      else {
+        alert(data);
+      }
+    };
 
-      };
     return (
         <>
 
@@ -55,8 +48,8 @@ const Customer = props => {
          <div className="container">
       <div className="py-4">
         <h1>Customer Details</h1>
-        <table class="table border shadow table-hover">
-          <thead class="thead-dark">
+        <table className="table border shadow table-hover">
+          <thead className="thead-dark">
             <tr>
               <th scope="col">AccountNo</th>
               <th scope="col">CustomerNo</th>
@@ -67,18 +60,18 @@ const Customer = props => {
             </tr>
           </thead>
           <tbody>
-          {dummyCustomers.map((customer) => (
-              <tr>
-                <td>{customer.AccountNo}</td>
-                <td>{customer.customerNo}</td>
-                <td>{customer.branchId}</td>
-                <td>{customer.balance}</td>
-                <td>{customer.openingDate}</td>
+          {customerAccounts.map((account) => (
+              <tr key={account.accountNumber}>
+                <td>{account.accountNumber}</td>
+                <td>{account.customer.customerNumber}</td>
+                <td>{account.branchId}</td>
+                <td>{account.openingBalance}</td>
+                <td>{account.accountOpeningDate}</td>
                 <td>
                  
                   <Link
-                    class="btn btn-danger"
-                    onClick={() => deleteCustomer()}
+                    className="btn btn-danger"
+                    onClick={() => deleteAccountHandler(account.accountNumber)}
                   >
                     Delete
                   </Link>

@@ -5,6 +5,7 @@ import { useNavigate,Link } from 'react-router-dom';
 import Home from '../Home/Home';
 import Dashboard from '../Dashboard/Dashboard';
 import Swal from 'sweetalert2'
+import { adminLogin } from '../../Service';
 const Login = props => {
 
     const [userId, setUserId] = useState('');
@@ -12,29 +13,31 @@ const Login = props => {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const navigate = useNavigate();
  
-  const login = (e) => {
+  const login = async (e) => {
     e.preventDefault();
-    console.log(userId, password);
     const userData = {
       userId,
       password,
     };
-    if(userId==="admin1" && password==="12345")
-    {
-        localStorage.setItem('token-info', JSON.stringify(userData));
-        setIsLoggedin(true);
-        setUserId('');
-        setPassword('');
-        navigate("/customers")
-    }
-    else{
+    try {
+      const {status, data} = await adminLogin(userData);
+      if(status === 200) {
+          localStorage.setItem('token-info', JSON.stringify(userData));
+          setIsLoggedin(true);
+          setUserId('');
+          setPassword('');
+          navigate("/customers")
+      }
+    } catch (err) {
+      if(err.response.status) {
         Swal.fire({
-            title: "Bad Credentials, Please try again!",
-            type: "success", 
-            confirmButtonText: 'Ok'
-          }).then((result) => {  if (result.isConfirmed) { window.location="/login"}});
+          title: "Bad Credentials, Please try again!",
+          type: "success", 
+          confirmButtonText: 'Ok'
+        }).then((result) => {  if (result.isConfirmed) { window.location="/login"}});
+      }
     }
-    
+   
   };
  
  

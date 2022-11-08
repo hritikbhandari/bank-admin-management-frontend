@@ -3,18 +3,61 @@ import axios from 'axios';
 
 
 const adminService = axios.create(
-    {baseURL: 'https://localhost:8080'}
+    {baseURL: 'http://localhost:8081'}
 )
 
-export const getAllCustomer=()=> {
+export const adminLogin = async (body) => {
+    const response = await adminService.post(`/admin/`, body);
+    return response;
+};
 
-    return adminService.get(`/customer`);
+export const getAllCustomerAccount = async ()=> {
+    const response = await adminService.get(`/account/`);
+    return response;
+};
 
-}
+export const getAllBranch = async ()=> {
+    const response = await adminService.get(`/branch/`);
+    return response;
+};
 
+export const deleteCustomerAccount = async (id) => {
+    const response = await adminService.delete(`/account/${id}`);
+    return response;
+};
 
-export const getAllBranch=()=> {
+export const deleteBranch = async (id) => {
+    const response = await adminService.delete(`/branch/${id}`);
+    return response;
+};
 
-    return adminService.get(`/branch`);
-
-}
+// DUMMY DATA
+// const dummyCustomers=[
+//     {
+//     "AccountNo":"C001",
+//     "customerNo":"1234",
+//     "branchId":"b001",
+//     "balance":"6000",
+//     "openingDate":"2022-7-11"
+//     },
+//     {
+//         "AccountNo":"C001",
+//     "customerNo":"1234",
+//     "branchId":"b001",
+//     "balance":"6000",
+//     "openingDate":"2022-7-11"
+//     }
+// ];
+// const dummyBranch=[
+//     {
+//     "BranchId":"b001",
+//     "BranchName":"Asif Ali Road",
+//     "BranchAddress":"Delhi",
+//     },
+//     {
+//       "BranchId":"b001",
+//       "BranchName":"Asif Ali Road",
+//       "BranchAddress":"Delhi",
+//       }
+   
+// ];
