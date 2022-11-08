@@ -18,3 +18,9 @@ export const getAllBranch=()=> {
     return adminService.get(`/branch`);
 
 }
+
+export const createBranch=()=> {
+
+    return adminService.post(`/branch`);
+
+}

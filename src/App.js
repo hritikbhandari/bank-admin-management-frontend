@@ -8,6 +8,7 @@ import NavBar from "./components/NavBar/NavBar";
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import Login from "./components/Login/Login";
 import NotFound from "./components/NotFound/NotFound";
+import Branch from "./components/Branch/Branch";
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
       <Route path="/branchs" element={<BranchDetails />} />
       <Route path="/customers" element={<Customer />} />
       <Route path="/add-customers" element={<Home />} />
-      <Route path="/add-branch" element={<Home/>} />
+      <Route path="/add-branch" element={<Branch />} />
       <Route path="*" element={<NotFound />} />
       </Routes>
      

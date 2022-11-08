@@ -49,7 +49,7 @@ const Login = props => {
     <h1 class="text-center">Bank Admin </h1>
     
     <form class="needs-validation">
-        <div class="form-group ">
+        <div class="form-group was-validated ">
             <label class="form-label" for="email">UserId</label>
             <input class="form-control" type="text" id="email" 
             onChange={(e) => setUserId(e.target.value)}
@@ -57,7 +57,7 @@ const Login = props => {
             placeholder="userId"
             required />
         </div>
-        <div class="form-group">
+        <div class="form-group was-validated">
             <label class="form-label" for="password">Password</label>
             <input class="form-control" type="password" id="password"
             onChange={(e) => setPassword(e.target.value)}
