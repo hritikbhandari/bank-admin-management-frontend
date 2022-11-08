@@ -9,6 +9,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import Login from "./components/Login/Login";
 import NotFound from "./components/NotFound/NotFound";
 import Branch from "./components/Branch/Branch";
+import CustomerAccount from "./components/CustomerAccount/CustomerAccount";
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/branchs" element={<BranchDetails />} />
       <Route path="/customers" element={<Customer />} />
-      <Route path="/add-customers" element={<Home />} />
+      <Route path="/add-customers" element={<CustomerAccount />} />
       <Route path="/add-branch" element={<Branch />} />
       <Route path="*" element={<NotFound />} />
       </Routes>
