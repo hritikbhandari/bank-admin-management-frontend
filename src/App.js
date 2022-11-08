@@ -1,29 +1,40 @@
 import {BrowserRouter as Router, Routes, Route,Link} from  "react-router-dom"
 
-import Navbar from './components/Links';
-import Links from './components/Links';
 import Dashboard from './components/Dashboard/Dashboard';
 import BranchDetails from "./components/BranchDetails/BranchDetails";
+import Customer from "./components/CustomerDetails/Customer";
+import Home from "./components/Home/Home";
+import NavBar from "./components/NavBar/NavBar";
+import "../node_modules/bootstrap/dist/css/bootstrap.css";
+import Login from "./components/Login/Login";
+import NotFound from "./components/NotFound/NotFound";
+
 
 function App() {
   return (
     <div className="App">
+
+     
     
-
-
-      
-      <Router>
+       
+       <Router>
      
 
 
-      
+       {/* <Dashboard /> */}
+        {/* <NavBar />  */}
       <Routes>
-      <Route path="/" element={<Dashboard />} />
-      <Route path="/branch" element={<BranchDetails />} />
-      <Route path="/customer" element={<BranchDetails />} />
+
+
+      <Route path="/login" element={<Login />} />
+      <Route path="/branchs" element={<BranchDetails />} />
+      <Route path="/customers" element={<Customer />} />
+      <Route path="/add-customers" element={<Home />} />
+      <Route path="/add-branch" element={<Home/>} />
+      <Route path="*" element={<NotFound />} />
       </Routes>
      
-      </Router>
+      </Router> 
      
     
     </div>
