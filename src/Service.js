@@ -31,6 +31,7 @@ export const deleteBranch = async (id) => {
     return response;
 };
 
+<<<<<<< HEAD
 // DUMMY DATA
 // const dummyCustomers=[
 //     {
@@ -61,3 +62,14 @@ export const deleteBranch = async (id) => {
 //       }
    
 // ];
+=======
+    return adminService.get(`/branch`);
+
+}
+
+export const createBranch=()=> {
+
+    return adminService.post(`/branch`);
+
+}
+>>>>>>> a54fcc7e09991ee0bb10fa16b1039e40bdc2a0af
