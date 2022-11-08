@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.login-form {
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:black;
+    overflow: auto;
+}
+.login {
+
+    width: 400px;
+    height: min-content;
+    padding: 15px;
+    border-radius: 9px;
+    background: #ffffff;
+    overflow:auto;
+}
+
+.login h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.login form {
+    font-size: 15px;
+}
+
+.login form .form-group {
+    margin-bottom: 9px;
+}
+
+.login form input[type="submit"] {
+    font-size: 15px;
+    margin-top: 10px;
+}
