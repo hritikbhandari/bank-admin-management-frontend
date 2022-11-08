@@ -32,9 +32,9 @@ const Login = props => {
       if(err.response.status) {
         Swal.fire({
           title: "Bad Credentials, Please try again!",
-          type: "success", 
+          type: "failure", 
           confirmButtonText: 'Ok'
-        }).then((result) => {  if (result.isConfirmed) { window.location="/login"}});
+        }).then((result) => {  if (result.isConfirmed) { navigate("/login")}});
       }
     }
    

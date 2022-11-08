@@ -1,6 +1,6 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import Select from "react-select";
-
+import Swal from 'sweetalert2';
 import {useNavigate} from "react-router-dom"
 import { createBranch, getAllBranch } from "../../Service";
 export default function(props)
@@ -9,16 +9,16 @@ export default function(props)
     const[branchId,setBranchId]=useState('');
     const[branchName,setBranchName]=useState('')
     const[branchAddress,setBranchAddress]=useState('')
-    const[allBranch,setAllBranch]=useState('')
+    const [options, setOptions] = useState([]);
     const[err,setError]=useState('')
     const navigate=useNavigate();
     
-    const options=[
-        {value:"Delhi",label:"Delhi"},
-        {value:"Mumbai",label:"Mumbai"},
-        {value:"Bangalore",label:"Bangalore"}
+    // const options=[
+    //     {value:"Delhi",label:"Delhi"},
+    //     {value:"Mumbai",label:"Mumbai"},
+    //     {value:"Bangalore",label:"Bangalore"}
 
-    ];
+    // ];
 
     const handleChange=(selectedOption) =>
     {
@@ -28,9 +28,20 @@ export default function(props)
 
     const init=async()=>{
         try{
-          let {data}=await getAllBranch()
-          setAllBranch(data)
-    
+          let {data}= await getAllBranch();
+          let tempCity = new Set();
+          data.map(branch => {
+            tempCity.add(branch.branchCity);
+          });
+          let tempOptions = [];
+          [...tempCity].map(city => {
+            tempOptions.push({
+              "value": city,
+              "label": city
+            });
+          })
+          console.log(tempOptions)
+          setOptions(Array.from(tempOptions));
         }
         catch(err)
         {
@@ -38,42 +49,53 @@ export default function(props)
         }
       }
 
+    useEffect(() => {
+      init();
+    }, []);
+
     
     const addBranch = async(e) => {
 
         e.preventDefault();
-        console.log(branchId);
-        console.log(branchAddress);
-        console.log(branchName);
+
         const branchData = {
-          branchId,
+          branchId: parseInt(branchId),
           branchName,
-          branchAddress
+          branchCity: branchAddress.value
         };
+        console.log(branchData);
         
         try{
-            let {data}=await createBranch(branchData)
-            console.log(data)
+            let {status} = await createBranch(branchData);
+            if(status === 201) {
+              Swal.fire({
+                title: "Branch Details created successfully!",
+                type: "success", 
+                confirmButtonText: 'Ok'
+              }).then((result) => {  if (result.isConfirmed) { navigate("/dashboard")}});
+              setBranchId('');
+              setBranchName('');
+              setBranchAddress('');
+            }
             
-      
           }
           catch(err)
           {
-            setError(err)
+            Swal.fire({
+              title: err.response.data,
+              type: "success", 
+              confirmButtonText: 'Ok'
+            }).then((result) => {  if (result.isConfirmed) { navigate("/add-branch")}});
           }
         }
     
-
-    
-
-
     return(
 
 
         <div class="login-form">
         <div class="login">
     
-        <h1 class="text-center">Branch Deatils</h1>
+        <h1 class="text-center">Branch Details</h1>
         
         <form class="needs-validation" novalidate>
             <div class="form-group was-validated">

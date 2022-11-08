@@ -31,7 +31,10 @@ export const deleteBranch = async (id) => {
     return response;
 };
 
-export const createBranch = () => {}
+export const createBranch = async (body) => {
+    const response = await adminService.post(`/branch/`,body);
+    return response;
+};
 
 // DUMMY DATA
 // const dummyCustomers=[
