@@ -15,7 +15,7 @@ const Dashboard = (props) => {
     <div>
       <ul>
         <li>
-          <Link to="/customers">Customers</Link>
+          <Link to="/customers">Accounts</Link>
         </li>
         <li>
           <Link to="/branchs">Branch Details</Link>

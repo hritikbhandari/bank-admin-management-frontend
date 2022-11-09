@@ -57,7 +57,7 @@ const Customer = props => {
         <Dashboard />
          <div className="container">
       <div className="py-4">
-        <h1>Customer Details</h1>
+        <h1>Customer Account Details</h1>
         <table className="table border shadow table-hover">
           <thead className="thead-dark">
             <tr>

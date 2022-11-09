@@ -117,16 +117,22 @@ const CustomerAccount=props=>
           }
           catch(err)
           {
-            Swal.fire({
-              title: err.response.data,
-              type: "success", 
-              confirmButtonText: 'Ok'
-            }).then((result) => {  if (result.isConfirmed) { navigate("/add-branch")}});
+            if(err.response.status === 400) {
+                Swal.fire({
+                    title: err.response.data,
+                    type: "success", 
+                    confirmButtonText: 'Ok'
+                  }).then((result) => {  if (result.isConfirmed) { navigate("/add-account")}});
+            } else {
+                Swal.fire({
+                    title: "Bad Request! Make sure the values are not empty ",
+                    type: "success", 
+                    confirmButtonText: 'Ok'
+                  }).then((result) => {  if (result.isConfirmed) { navigate("/add-account")}});
+            }
           }
         };
-                             
-   
-    
+                              
     return (
     <>
         {isLoggedin?

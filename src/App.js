@@ -8,6 +8,7 @@ import Login from "./components/Login/Login";
 import NotFound from "./components/NotFound/NotFound";
 import Branch from "./components/Branch/Branch";
 import CustomerAccount from "./components/CustomerAccount/CustomerAccount";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
       <Routes>
 
       <Route path="/" element={<Home />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/login" element={<Login />} />
       <Route path="/branchs" element={<BranchDetails />} />
       <Route path="/customers" element={<Customer />} />
