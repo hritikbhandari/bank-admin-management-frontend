@@ -3,6 +3,9 @@ import Select from "react-select";
 import Swal from 'sweetalert2';
 import {useNavigate} from "react-router-dom"
 import { createBranch, getAllBranch } from "../../Service";
+import "./branch-style.css"
+
+
 export default function(props)
 {
 
@@ -97,8 +100,8 @@ export default function(props)
     
         <h1 class="text-center">Branch Details</h1>
         
-        <form class="needs-validation" novalidate>
-            <div class="form-group was-validated">
+        <form class="needs-validation was-validated"  >
+            <div class="form-group">
                 <label class="form-label" for="branchId">BranchId</label>
                 <input class="form-control" type="text" id="branchId" 
                 onChange={(e) => setBranchId(e.target.value)}
@@ -106,7 +109,7 @@ export default function(props)
                 placeholder="branchId"
                 required />
             </div>
-            <div class="form-group was-validated">
+            <div class="form-group ">
                 <label class="form-label" for="branchName">BranchName</label>
                 <input class="form-control" type="text" id="branchName" 
                 onChange={(e) => setBranchName(e.target.value)}
@@ -115,7 +118,7 @@ export default function(props)
                 required />
             </div>
 
-            <div class="form-group was-validated">
+            <div class="form-group">
                 <label class="form-label" for="branchAddress">Branch Address</label>
                 <Select options={options}  onChange={handleChange}></Select>
             </div>
