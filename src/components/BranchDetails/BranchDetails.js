@@ -1,21 +1,27 @@
 import React,{useEffect,useState} from 'react';
-import PropTypes from 'prop-types';
-import Table from 'react-bootstrap/Table';
 import {Link} from "react-router-dom";
 import { deleteBranch, getAllBranch } from '../../Service';
 import Dashboard from '../Dashboard/Dashboard';
+import Home from '../Home/Home';
+import './branch-details.css'
 
 const BranchDetails = props => {
    
   const[branchDetails,setBranchDetails]=useState([]);
   const[err,setError]=useState('');
   const [loadFlag, setLoadFlag] = useState(true);
-
+  const [isLoggedin, setIsLoggedin] = useState(false);
 
   const loadData = async()=>{
+
+    if(localStorage.getItem('token-info')!=null)
+    {
+      setIsLoggedin(true)
+    }
+
     try{
       let {status, data} =await getAllBranch();
-      if(status == 200)
+      if(status === 200)
         setBranchDetails(data);
     }
     catch(err)
@@ -45,8 +51,11 @@ const deleteBranchHandler = async (id) => {
     
     return (
       <>
+      {isLoggedin?
+        (
+        <>
       <Dashboard/>
-          <div className="container">
+      <div className="container">
       <div className="py-4">
         <h1>Branch Details</h1>
         <table class="table border shadow table-hover">
@@ -81,14 +90,14 @@ const deleteBranchHandler = async (id) => {
        
       </div>
     </div>
-      </>
-      
+      </>):(<Home />)
+    }
+    </>
+          
     );
 };
 
-BranchDetails.propTypes = {
-    
-};
+;
 
 export default BranchDetails;
 

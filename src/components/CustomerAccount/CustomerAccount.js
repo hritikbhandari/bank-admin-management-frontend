@@ -2,11 +2,13 @@ import React, { useState,useEffect } from "react"
 import Select from "react-select"
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import "./account-style.css"
-import { createAccount, getAllBranch } from "../../Service";
+import "./customer-account.css"
+import { createAccount, getAllBranch } from "../../Service"
+import Home from "../Home/Home";
 
-//eslint-disable-next-line 
-export default function (props) {
+
+const CustomerAccount=props=>
+{
 
     const [accountNumber,setAccountNumber]=useState('');
     const [customerNumber,setCustomerNumber]=useState('');
@@ -20,6 +22,7 @@ export default function (props) {
     const [accountStatusOptions, setAccountStatusOptions] = useState([]);
     const[err,setError]=useState('')
     const navigate = useNavigate();
+    const [isLoggedin, setIsLoggedin] = useState(false);
     
         const BranchHandler=(selectedOption)=>{
             setBranchId(selectedOption.value);
@@ -75,7 +78,11 @@ export default function (props) {
           }
     
         useEffect(() => {
-          init();
+            if(localStorage.getItem('token-info')!=null)
+            {
+              setIsLoggedin(true)
+            }
+            init();
         }, []);
 
 
@@ -119,11 +126,13 @@ export default function (props) {
    
     
     return (
-
+    <>
+        {isLoggedin?
+        (
         <div class="customer-form">
             <div class="customer">
 
-                <h1 class="text-center">Add Customer</h1>
+                <h1 class="text-center">Add Account</h1>
 
                 <form class="needs-validation was-validated">
                     <div class="form-group ">
@@ -166,20 +175,17 @@ export default function (props) {
                     <div class="form-group ">
                         <label class="form-label">Account Type</label>
                         <Select options={accountTypeOptions}  onChange={accountTypeHandler}></Select>
-                        {/* <option value={accountType} onChange={accountTypeHandler}></option> */}
-                        
                     </div>
                     <div class="form-group ">
                         <label class="form-label">Account Status</label>
                         <Select options={accountStatusOptions}  onChange={StatusHandler}></Select>
-                            {/* <option value={accountStatus} onChange={StatusHandler}>Active</option> */}
-                        
-                        
                     </div>
                     <input class="btn btn-success w-100" type="submit" onClick={Add} value="Add"  />
                 </form>
             </div>
-        </div>
-
+        </div>):(<Home />)
+        }
+    </>
     )
 }
+export default CustomerAccount;

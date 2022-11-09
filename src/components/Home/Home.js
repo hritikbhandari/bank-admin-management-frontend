@@ -1,10 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import "./home.css";
 import { useNavigate } from "react-router-dom";
-Home.propTypes = {
-    
-};
+
 
 function Home(props) {
 

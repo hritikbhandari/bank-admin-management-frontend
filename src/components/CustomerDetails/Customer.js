@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import "./customer.css";
 import {Link} from "react-router-dom";
 import { deleteCustomerAccount, getAllCustomerAccount } from '../../Service';
 import Dashboard from '../Dashboard/Dashboard';
+import Home from '../Home/Home';
 
 
 
@@ -11,6 +12,7 @@ const Customer = props => {
     const [customerAccounts, setCustomerAccounts] = useState([]);
     const [err, setError] = useState('');
     const [loadFlag, setLoadFlag] = useState(true);
+    const [isLoggedin, setIsLoggedin] = useState(false);
     
 
     const loadData = async () => {
@@ -24,6 +26,12 @@ const Customer = props => {
     }
 
     useEffect(() => {
+
+      if(localStorage.getItem('token-info')!=null)
+      {
+        setIsLoggedin(true)
+      }
+
       if(loadFlag) {
         loadData();
         setLoadFlag(false);
@@ -43,8 +51,10 @@ const Customer = props => {
 
     return (
         <>
-
-        <Dashboard/>
+      {isLoggedin?
+        (
+        <>
+        <Dashboard />
          <div className="container">
       <div className="py-4">
         <h1>Customer Details</h1>
@@ -83,14 +93,13 @@ const Customer = props => {
        
       </div>
     </div>
-        
+    </>):(<Home />)
+    }    
         </>
        
     );
 };
 
-Customer.propTypes = {
-    
-};
+
 
 export default Customer;

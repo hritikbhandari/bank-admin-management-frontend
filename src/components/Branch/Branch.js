@@ -3,10 +3,11 @@ import Select from "react-select";
 import Swal from 'sweetalert2';
 import {useNavigate} from "react-router-dom"
 import { createBranch, getAllBranch } from "../../Service";
-import "./branch-style.css"
+import "./branch.css"
+import Home from "../Home/Home";
 
 
-export default function(props)
+const Branch=props =>
 {
 
     const[branchId,setBranchId]=useState('');
@@ -15,13 +16,9 @@ export default function(props)
     const [options, setOptions] = useState([]);
     const[err,setError]=useState('')
     const navigate=useNavigate();
+    const [isLoggedin, setIsLoggedin] = useState(false);
     
-    // const options=[
-    //     {value:"Delhi",label:"Delhi"},
-    //     {value:"Mumbai",label:"Mumbai"},
-    //     {value:"Bangalore",label:"Bangalore"}
-
-    // ];
+   
 
     const handleChange=(selectedOption) =>
     {
@@ -30,12 +27,18 @@ export default function(props)
     }
 
     const init=async()=>{
+
+        if(localStorage.getItem('token-info')!=null)
+        {
+          setIsLoggedin(true)
+        }
         try{
           let {data}= await getAllBranch();
           let tempCity = new Set();
           data.map(branch => {
             tempCity.add(branch.branchCity);
           });
+        
           let tempOptions = [];
           [...tempCity].map(city => {
             tempOptions.push({
@@ -94,7 +97,9 @@ export default function(props)
     
     return(
 
-
+      <>
+      {isLoggedin?
+        (
         <div class="login-form">
         <div class="login">
     
@@ -125,8 +130,11 @@ export default function(props)
             <input class="btn btn-success w-100" type="submit" onClick={addBranch} value="SUBMIT" />
         </form>
         </div>
-    </div>
+    </div>):(<Home />)
+    }
+    </>
 
 
     )
 }
+export default Branch;

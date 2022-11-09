@@ -1,12 +1,9 @@
 import React,{useState} from 'react';
-import PropTypes from 'prop-types';
-import "./style.css"
-
+import "./login.css"
 import { useNavigate,Link } from 'react-router-dom';
-import Home from '../Home/Home';
-import Dashboard from '../Dashboard/Dashboard';
 import Swal from 'sweetalert2'
 import { adminLogin } from '../../Service';
+
 const Login = props => {
 
     const [userId, setUserId] = useState('');
