@@ -36,6 +36,11 @@ export const createBranch = async (body) => {
     return response;
 };
 
+export const createAccount = async (id, body) => {
+    const response = await adminService.post(`/account/${id}`, body);
+    return response;
+};
+
 // DUMMY DATA
 // const dummyCustomers=[
 //     {

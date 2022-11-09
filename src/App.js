@@ -31,7 +31,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/branchs" element={<BranchDetails />} />
       <Route path="/customers" element={<Customer />} />
-      <Route path="/add-customers" element={<CustomerAccount />} />
+      <Route path="/add-customer" element={<CustomerAccount />} />
       <Route path="/add-branch" element={<Branch />} />
       <Route path="*" element={<NotFound />} />
       </Routes>

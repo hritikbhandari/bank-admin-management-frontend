@@ -1,16 +1,22 @@
-import React, { useState } from "react"
-import "./style.css"
+import React, { useState, useEffect } from "react"
+import "./account-style.css";
+import Select from "react-select";
+import Swal from 'sweetalert2';
+import {useNavigate} from "react-router-dom";
+import { getAllBranch, createAccount } from "../../Service";
 //eslint-disable-next-line 
 export default function (props) {
 
     const [accountNumber,setAccountNumber]=useState('');
     const [customerNumber,setCustomerNumber]=useState('');
-    const [branchId,setBranchId]=useState('');
-    const [openingBalance,setOpeningBalance]=useState([]);
+    const [branchId,setBranchId]=useState([]);
+    const [openingBalance,setOpeningBalance]=useState('');
     const [openingDate,setOpeningDate]=useState('');
     const [accountType,setAccountType]=useState([]);
     const [accountStatus,setAccountStatus]=useState([]);
-
+    const [options, setOptions] = useState([]);
+    const[err,setError]=useState('')
+    const navigate = useNavigate();
     
         const BranchHandler=(selectedOption)=>{
             setBranchId(selectedOption);
@@ -26,7 +32,75 @@ export default function (props) {
             setAccountType(selectedOption);
             console.log("Branch Handle",selectedOption);
         }
-        const Add={}
+        const init=async()=>{
+            const tempAccountType = ["Savings, Current"];
+            setAccountType(tempAccountType);
+            const tempAccountStatus = ["Active", "Inactive"];
+            setAccountStatus(tempAccountStatus);
+            try{
+                let {data}= await getAllBranch();
+                let tempBranchID = new Set();
+                data.map(branch => {
+                    tempBranchID.add(branch.branchId);
+                });
+                let tempOptions = [];
+                [...tempBranchID].map(id => {
+                    tempOptions.push({
+                    "value": id,
+                    "label": id
+                    });
+                })
+                console.log(tempOptions)
+                setOptions([...tempOptions]);
+              }
+              catch(err)
+              {
+                setError(err)
+              }
+          }
+    
+        useEffect(() => {
+          init();
+        }, []);
+
+
+        const Add = async (e) => {
+            e.preventDefault();
+
+            const accountData = {
+                accountNumber: parseInt(accountNumber),
+                branchId: parseInt(branchId),
+                openingBalance: parseInt(openingBalance),
+                openingDate,
+                accountStatus,
+                accountType
+            };
+            console.log(accountData);
+        
+        try{
+            // let {status} = await createAccount(customerNumber, accountData);
+            // if(status === 201) {
+            //   Swal.fire({
+            //     title: "Account Details created successfully!",
+            //     type: "success", 
+            //     confirmButtonText: 'Ok'
+            //   }).then((result) => {  if (result.isConfirmed) { navigate("/dashboard")}});
+            //   setAccountNumber('');
+            //   setCustomerNumber('');
+            //   setOpeningDate('');
+            //   setOpeningBalance('');
+            // }
+            
+          }
+          catch(err)
+          {
+            Swal.fire({
+              title: err.response.data,
+              type: "success", 
+              confirmButtonText: 'Ok'
+            }).then((result) => {  if (result.isConfirmed) { navigate("/add-branch")}});
+          }
+        };
                              
    
     
@@ -57,8 +131,8 @@ export default function (props) {
                     <div class="form-group ">
                         <label class="form-label">Branch Id</label>
                         <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-                            <option selected>Choose</option>
-                            <option value={branchId} onChange={BranchHandler}></option>
+                            <Select options={options}  onChange={BranchHandler}></Select>
+                            {/* <option value={branchId} onChange={BranchHandler}></option> */}
                          
                         </select>
                     </div>
