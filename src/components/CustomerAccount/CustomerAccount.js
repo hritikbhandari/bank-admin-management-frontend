@@ -6,27 +6,110 @@ export default function (props) {
     const [accountNumber,setAccountNumber]=useState('');
     const [customerNumber,setCustomerNumber]=useState('');
     const [branchId,setBranchId]=useState('');
-    const [openingBalance,setOpeningBalance]=useState([]);
+    const [openingBalance,setOpeningBalance]=useState('');
     const [openingDate,setOpeningDate]=useState('');
-    const [accountType,setAccountType]=useState([]);
-    const [accountStatus,setAccountStatus]=useState([]);
-
+    const [accountType,setAccountType]=useState('');
+    const [accountStatus,setAccountStatus]=useState('');
+    const [branchIdOptions, setBranchIdOptions] = useState([]);
+    const [accountTypeOptions, setAccountTypeOptions] = useState([]);
+    const [accountStatusOptions, setAccountStatusOptions] = useState([]);
+    const[err,setError]=useState('')
+    const navigate = useNavigate();
     
         const BranchHandler=(selectedOption)=>{
-            setBranchId(selectedOption);
-            console.log("Branch Handle",selectedOption);
+            setBranchId(selectedOption.value);
+            console.log("Branch Handle",selectedOption.value);
         }
         
         const StatusHandler=(selectedOption)=>{
-            setAccountStatus(selectedOption);
-            console.log("Acccount Status",selectedOption);
+            setAccountStatus(selectedOption.value);
+            console.log("Acccount Status",selectedOption.value);
         }
         
         const accountTypeHandler=(selectedOption)=>{
-            setAccountType(selectedOption);
-            console.log("Branch Handle",selectedOption);
+            setAccountType(selectedOption.value);
+            console.log("Branch Handle",selectedOption.value);
         }
-        const Add={}
+        const init=async()=>{
+            const tempAccountType = [{
+                    "value": "Current",
+                    "label": "Current"
+                }, {
+                    "value": "Savings",
+                    "label": "Savings"
+                }];
+            setAccountTypeOptions(tempAccountType);
+            const tempAccountStatus = [{
+                "value": "Active",
+                "label": "Active"
+            }, {
+                "value": "Inactive",
+                "label": "Inactive"
+            }];
+            setAccountStatusOptions(tempAccountStatus);
+            try{
+                let {data}= await getAllBranch();
+                let tempBranchID = new Set();
+                data.map(branch => {
+                    tempBranchID.add(branch.branchId);
+                });
+                let tempOptions = [];
+                [...tempBranchID].map(id => {
+                    tempOptions.push({
+                    "value": id,
+                    "label": id
+                    });
+                })
+                console.log(tempOptions)
+                setBranchIdOptions(tempOptions);
+              }
+              catch(err)
+              {
+                setError(err)
+              }
+          }
+    
+        useEffect(() => {
+          init();
+        }, []);
+
+
+        const Add = async (e) => {
+            e.preventDefault();
+
+            const accountData = {
+                accountNumber: parseInt(accountNumber),
+                branchId: parseInt(branchId),
+                openingBalance: parseInt(openingBalance),
+                accountOpeningDate: openingDate,
+                accountStatus,
+                accountType
+            };
+            console.log(accountData);
+        
+        try{
+            let {status} = await createAccount(customerNumber, accountData);
+            if(status === 201) {
+              Swal.fire({
+                title: "Account Details created successfully!",
+                type: "success", 
+                confirmButtonText: 'Ok'
+              }).then((result) => {  if (result.isConfirmed) { navigate("/dashboard")}});
+              setAccountNumber('');
+              setCustomerNumber('');
+              setOpeningDate('');
+              setOpeningBalance('');
+            }  
+          }
+          catch(err)
+          {
+            Swal.fire({
+              title: err.response.data,
+              type: "success", 
+              confirmButtonText: 'Ok'
+            }).then((result) => {  if (result.isConfirmed) { navigate("/add-branch")}});
+          }
+        };
                              
    
     
@@ -56,11 +139,9 @@ export default function (props) {
                     </div>
                     <div class="form-group ">
                         <label class="form-label">Branch Id</label>
-                        <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-                            <option selected>Choose</option>
-                            <option value={branchId} onChange={BranchHandler}></option>
-                         
-                        </select>
+                    
+                            <Select options={branchIdOptions}  onChange={BranchHandler}></Select>
+
                     </div>
                     <div class="form-group ">
                         <label class="form-label">Opening Balance</label>
@@ -73,26 +154,22 @@ export default function (props) {
                     <div class="form-group ">
                         <label class="form-label">Opening Date</label>
                         <input class="form-control" type="date"
-                         
                          onChange={(e)=>setOpeningDate(e.target.value)}
                          value={openingDate}
                             required />
                     </div>
                     <div class="form-group ">
                         <label class="form-label">Account Type</label>
-                        <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-                            <option selected>Choose</option>
-                            <option value={accountType} onChange={accountTypeHandler}></option>
-                           
-                        </select>
+                        <Select options={accountTypeOptions}  onChange={accountTypeHandler}></Select>
+                        {/* <option value={accountType} onChange={accountTypeHandler}></option> */}
+                        
                     </div>
                     <div class="form-group ">
                         <label class="form-label">Account Status</label>
-                        <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-                            <option selected>Choose</option>
-                            <option value={accountStatus} onChange={StatusHandler}>Active</option>
+                        <Select options={accountStatusOptions}  onChange={StatusHandler}></Select>
+                            {/* <option value={accountStatus} onChange={StatusHandler}>Active</option> */}
                         
-                        </select>
+                        
                     </div>
                     <input class="btn btn-success w-100" type="submit" onClick={Add} value="Add"  />
                 </form>
