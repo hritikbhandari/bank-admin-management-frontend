@@ -33,12 +33,15 @@ const Branch=props =>
           setIsLoggedin(true)
         }
         try{
+
+          //using set to avoid duplicates
           let {data}= await getAllBranch();
           let tempCity = new Set();
           data.map(branch => {
             tempCity.add(branch.branchCity);
           });
         
+          //creating option for dropdown
           let tempOptions = [];
           [...tempCity].map(city => {
             tempOptions.push({

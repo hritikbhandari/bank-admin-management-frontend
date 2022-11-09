@@ -1,7 +1,7 @@
 import React from 'react';
 import "./not-found.css"
 
-
+//Component for invalid url
 function NotFound(props) {
     return (
         <section class="page_404">

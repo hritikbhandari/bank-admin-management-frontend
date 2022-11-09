@@ -22,7 +22,7 @@ const CustomerAccount=props=>
     const [accountStatusOptions, setAccountStatusOptions] = useState([]);
     const[err,setError]=useState('')
     const navigate = useNavigate();
-    const [isLoggedin, setIsLoggedin] = useState(false);
+    const [isLoggedin, setIsLoggedin] = useState(false);//It is used to validate every component rendering
     
         const BranchHandler=(selectedOption)=>{
             setBranchId(selectedOption.value);
@@ -39,6 +39,8 @@ const CustomerAccount=props=>
             console.log("Branch Handle",selectedOption.value);
         }
         const init=async()=>{
+
+            //setting option for dropdown
             const tempAccountType = [{
                     "value": "Current",
                     "label": "Current"

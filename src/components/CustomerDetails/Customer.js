@@ -14,7 +14,7 @@ const Customer = props => {
     const [loadFlag, setLoadFlag] = useState(true);
     const [isLoggedin, setIsLoggedin] = useState(false);
     
-
+    //This method is used to load data by api calling
     const loadData = async () => {
         try {
             const {status, data} = await getAllCustomerAccount();
